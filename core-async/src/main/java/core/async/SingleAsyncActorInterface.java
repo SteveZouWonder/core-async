@@ -20,7 +20,7 @@ public interface SingleAsyncActorInterface<T, R> {
 
     void onMapperComplete(Consumer<R> consumer);
 
-    T getT();
+    T getSupplied();
 
     R getMapped();
 }

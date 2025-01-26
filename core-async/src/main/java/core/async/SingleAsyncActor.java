@@ -76,7 +76,7 @@ public final class SingleAsyncActor<T, R> extends AbstractAsyncActor implements 
     }
 
     @Override
-    public T getT() {
+    public T getSupplied() {
         if (Objects.isNull(super.waitMills)) {
             return CoreAsyncHelper.tryGetFuture(supplierFuture);
         } else {
