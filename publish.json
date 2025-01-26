@@ -1,0 +1,14 @@
+{
+  "modules": [
+    {
+      "name": ":core-async",
+      "artifactId": "core-async",
+      "version": "0.0.1"
+    },
+    {
+      "name": ":core-async-test",
+      "artifactId": "core-async-test",
+      "version": "0.0.1"
+    }
+  ]
+}
