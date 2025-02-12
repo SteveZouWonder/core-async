@@ -2,25 +2,16 @@ package core.async;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * @author stevezou
  */
-public interface SingleAsyncActorInterface<T, R> {
-    void supply(Supplier<T> supplier);
+public interface SingleAsyncActorInterface<T> {
+    <R> SingleAsyncActor<R> map(Function<T, R> function);
 
-    AsyncSupplier<R> map(Function<T, R> function);
+    <E extends Exception> void onError(ErrorHandler<E> errorHandler);
 
-    void onSupplierError(ErrorHandler<T> errorHandler);
-
-    void onSupplierComplete(Consumer<T> consumer);
-
-    void onMapperError(ErrorHandler<R> errorHandler);
-
-    void onMapperComplete(Consumer<R> consumer);
+    void onComplete(Consumer<T> consumer);
 
     T getSupplied();
-
-    R getMapped();
 }
