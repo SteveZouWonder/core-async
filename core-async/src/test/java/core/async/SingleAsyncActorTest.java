@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * @author stevezou
  */
 class SingleAsyncActorTest {
-    private static SingleAsyncActor<String> testStringSingleAsyncActor() {
+    private static ActorInterface<String> testStringSingleAsyncActor() {
         return AsyncActors.single(() -> {
             try {
                 Thread.sleep(1000);
@@ -24,7 +24,7 @@ class SingleAsyncActorTest {
 
     @Test
     void supply() {
-        SingleAsyncActor<String> singleAsyncActor = testStringSingleAsyncActor();
+        ActorInterface<String> singleAsyncActor = testStringSingleAsyncActor();
         String supplied = singleAsyncActor.getSupplied();
         Assertions.assertEquals("test", supplied);
     }
@@ -32,7 +32,7 @@ class SingleAsyncActorTest {
     @Test
     void supplyWithFallback() {
         String message = "Test on complete";
-        SingleAsyncActor<String> singleAsyncActor = AsyncActors.single(() -> {
+        ActorInterface<String> singleAsyncActor = AsyncActors.single(() -> {
             try {
                 Thread.sleep(1000);
                 throw new RuntimeException(message);
@@ -60,7 +60,7 @@ class SingleAsyncActorTest {
 
     @Test
     void onComplete() {
-        SingleAsyncActor<String> singleAsyncActor = testStringSingleAsyncActor();
+        ActorInterface<String> singleAsyncActor = testStringSingleAsyncActor();
         singleAsyncActor.onComplete(result -> {
             throw new RuntimeException("Test on complete");
         });
@@ -70,7 +70,7 @@ class SingleAsyncActorTest {
     @Test
     void onCompleteWithErrorHandler() {
         String message = "Test on complete";
-        SingleAsyncActor<String> singleAsyncActor = AsyncActors.single(() -> {
+        ActorInterface<String> singleAsyncActor = AsyncActors.single(() -> {
             try {
                 Thread.sleep(1000);
                 throw new RuntimeException(message);

@@ -1,5 +1,6 @@
 package core.async;
 
+import core.async.impl.AsyncGetter;
 import core.framework.log.Markers;
 import core.framework.util.Strings;
 import org.slf4j.Logger;
@@ -15,8 +16,8 @@ import java.util.function.Supplier;
 /**
  * @author stevezou
  */
-// todo unit test: including: 1. methods in SingleAsyncActorInterface, 2. waitMills in AbstractAsyncActor
-public final class SingleAsyncActor<T> extends AbstractAsyncActor implements SingleAsyncActorInterface<T> {
+// todo unit test: including: 1. methods in ActorInterface, 2. waitMills in AbstractAsyncActor
+public final class SingleAsyncActor<T> extends AbstractAsyncActor implements ActorInterface<T> {
     private final Logger logger = LoggerFactory.getLogger(SingleAsyncActor.class);
 
     private CompletableFuture<T> supplierFuture;
