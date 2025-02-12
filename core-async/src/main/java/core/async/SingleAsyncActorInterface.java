@@ -9,9 +9,11 @@ import java.util.function.Function;
 public interface SingleAsyncActorInterface<T> {
     <R> SingleAsyncActor<R> map(Function<T, R> function);
 
-    <E extends Exception> void onError(ErrorHandler<E> errorHandler);
-
     void onComplete(Consumer<T> consumer);
 
+    void onComplete(Consumer<T> consumer, ErrorHandler errorHandler);
+
     T getSupplied();
+
+    T getSupplied(FallbackHandler<T> fallbackHandler);
 }

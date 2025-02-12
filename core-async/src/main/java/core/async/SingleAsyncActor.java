@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public final class SingleAsyncActor<T> extends AbstractAsyncActor implements SingleAsyncActorInterface<T> {
     private final Logger logger = LoggerFactory.getLogger(SingleAsyncActor.class);
 
-    private final CompletableFuture<T> supplierFuture;
+    private CompletableFuture<T> supplierFuture;
 
     private SingleAsyncActor(CompletableFuture<T> supplierFuture) {
         this.supplierFuture = supplierFuture;
@@ -41,17 +41,8 @@ public final class SingleAsyncActor<T> extends AbstractAsyncActor implements Sin
     }
 
     @Override
-    public <E extends Exception> void onError(ErrorHandler<E> errorHandler) {
-        supplierFuture.whenComplete((t, e) -> {
-            if (Objects.nonNull(e)) {
-                errorHandler.handle(e);
-            }
-        });
-    }
-
-    @Override
     public void onComplete(Consumer<T> consumer) {
-        supplierFuture.whenComplete((t, e) -> {
+        supplierFuture = supplierFuture.whenComplete((t, e) -> {
             if (Objects.isNull(e)) {
                 consumer.accept(t);
             } else {
@@ -61,9 +52,31 @@ public final class SingleAsyncActor<T> extends AbstractAsyncActor implements Sin
     }
 
     @Override
+    public void onComplete(Consumer<T> consumer, ErrorHandler errorHandler) {
+        supplierFuture = supplierFuture.whenComplete((t, e) -> {
+            if (Objects.isNull(e)) {
+                consumer.accept(t);
+            } else {
+                logger.error(Markers.errorCode(ErrorCodes.ASYNC_ACTOR_RUN_FAILED), Strings.format("Async actor run failed, msg={}", e.getMessage()), e);
+                errorHandler.handle(e);
+            }
+        });
+    }
+
+    @Override
     public T getSupplied() {
+        return getExceptionalSupplied(supplierFuture::get);
+    }
+
+    @Override
+    public T getSupplied(FallbackHandler<T> fallbackHandler) {
+        CompletableFuture<T> tCompletableFuture = supplierFuture.exceptionallyAsync(fallbackHandler::handle);
+        return getExceptionalSupplied(tCompletableFuture::get);
+    }
+
+    private T getExceptionalSupplied(AsyncGetter<T> exceptionGetter) {
         try {
-            return supplierFuture.get();
+            return exceptionGetter.get();
         } catch (InterruptedException | ExecutionException e) {
             logger.error(Markers.errorCode(ErrorCodes.ASYNC_ACTOR_RUN_FAILED), Strings.format("Async actor run failed, msg={}", e.getMessage()), e);
             throw new RuntimeException(e);

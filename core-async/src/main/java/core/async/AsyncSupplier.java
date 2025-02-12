@@ -3,6 +3,6 @@ package core.async;
 /**
  * @author stevezou
  */
-public interface AsyncSupplier<R> {
-    R get();
+public interface AsyncSupplier<T> {
+    T get();
 }
