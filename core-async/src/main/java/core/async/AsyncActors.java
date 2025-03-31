@@ -14,7 +14,7 @@ public final class AsyncActors {
         return new SingleAsyncActor<>(supplier, waitMills);
     }
 
-    public static <A, B, R> ActorInterface<R> combine(SingleAsyncActor<A> actor1, SingleAsyncActor<B> actor2, BIReducer<A, B, R> biReducer) {
-        return null;
+    public static <A, B, R> ActorInterface<R> combine(Supplier<A> actor1, Supplier<B> actor2, BIReducer<A, B, R> biReducer) {
+        return new BIAsyncActor<>(actor1, actor2, biReducer);
     }
 }

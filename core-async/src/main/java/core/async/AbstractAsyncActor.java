@@ -22,6 +22,9 @@ public abstract class AbstractAsyncActor<T> {
     protected Long waitMills = 5000L;
     protected CompletableFuture<T> supplierFuture;
 
+    protected AbstractAsyncActor() {
+    }
+
     protected AbstractAsyncActor(long waitMills) {
         this.waitMills = waitMills;
     }
