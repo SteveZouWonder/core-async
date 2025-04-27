@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @author stevezou
@@ -36,6 +37,12 @@ public abstract class AbstractAsyncActor<T> {
     public AbstractAsyncActor(CompletableFuture<T> supplierFuture, long waitMills) {
         this.supplierFuture = supplierFuture;
         this.waitMills = waitMills;
+    }
+
+    public <R, U> ActorInterface<U> combine(Supplier<R> supplier, BIReducer<T, R, U> function) {
+        CompletableFuture<R> rSupplierFuture = CompletableFuture.supplyAsync(supplier);
+        CompletableFuture<U> combinedFuture = supplierFuture.thenCombine(rSupplierFuture, function::reduce);
+        return new SingleAsyncActor<>(combinedFuture);
     }
 
     public <R> SingleAsyncActor<R> map(Function<T, R> function) {

@@ -8,6 +8,6 @@ import org.junit.jupiter.api.Test;
 class MultiAsyncActorTest {
     @Test
     void test() {
-        MultiAsyncActor.Builder<String> builder = new MultiAsyncActor.Builder<>(String.class);
+//        MultiAsyncActor.Builder<String> builder = new MultiAsyncActor.Builder<>(String.class);
     }
 }

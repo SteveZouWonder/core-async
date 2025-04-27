@@ -7,6 +7,7 @@ import java.util.function.Function;
  * @author stevezou
  */
 public interface ActorInterface<T> {
+
     <R> ActorInterface<R> map(Function<T, R> function);
 
     void onComplete(Consumer<T> consumer);
