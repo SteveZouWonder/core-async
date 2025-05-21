@@ -1,4 +1,4 @@
-package core.async;
+package core.async.common;
 
 /**
  * @author stevezou

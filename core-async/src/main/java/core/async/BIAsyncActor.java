@@ -1,5 +1,7 @@
 package core.async;
 
+import core.async.common.BIReducer;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 

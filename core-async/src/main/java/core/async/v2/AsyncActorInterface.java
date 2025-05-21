@@ -1,8 +1,8 @@
 package core.async.v2;
 
-import core.async.BIReducer;
-import core.async.ErrorHandler;
-import core.async.FallbackHandler;
+import core.async.common.BIReducer;
+import core.async.common.ErrorHandler;
+import core.async.common.FallbackHandler;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
