@@ -1,6 +1,5 @@
 package core.async;
 
-import core.async.impl.AsyncGetter;
 import core.framework.log.Markers;
 import core.framework.util.Strings;
 import org.slf4j.Logger;

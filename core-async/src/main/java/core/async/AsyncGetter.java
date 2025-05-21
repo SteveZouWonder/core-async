@@ -1,4 +1,4 @@
-package core.async.impl;
+package core.async;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
