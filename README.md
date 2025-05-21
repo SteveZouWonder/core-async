@@ -36,16 +36,42 @@ Using mapping or reducing actions to combine all responses to a new structure as
 
 | Milestone   | Deadline   | Status                                   |
 |--------|------------|------------------------------------------|
-| Requirements investigation   | 2025-04-13 | <font color='#f79232'>IN PROGRESS</font> |
-| Code implementation  | 2025-04-25 | <font color='#f79232'>IN PROGRESS</font> |
-| Unit test covering  | 2025-04-25 | <font color='#f79232'>IN PROGRESS</font> |
+| Requirements investigation   | 2025-04-13 | <font color='#f79232'>DONE</font> |
+| Code implementation  | 2025-04-25 | <font color='#f79232'>DONE</font> |
+| Unit test covering  | 2025-04-25 | <font color='#f79232'>DONE</font>        |
 | Core-ng logging metrics implementation  | 2025-05-16 | <font color='#6b6e76'>NOT STARTED</font> |
-| Load Testing  | 2025-05-23 | <font color='#6b6e76'>NOT STARTED</font>                              |
-| User manual book | 2025-05-23 | <font color='#6b6e76'>NOT STARTED</font>                              |
-| Demo project implementation | 2025-05-23 | <font color='#6b6e76'>NOT STARTED</font>                              |
-| Code review | 2025-05-30 | <font color='#6b6e76'>NOT STARTED</font>                              |
-| Publish the MVP version | 2025-06-06 | <font color='#6b6e76'>NOT STARTED</font>                              |
-| Wonder project practice with core-async library | 2025-06-30 | <font color='#6b6e76'>NOT STARTED</font>                              |
+| Load Testing  | 2025-05-23 | <font color='#6b6e76'>NOT STARTED</font> |
+| User manual book | 2025-05-23 | <font color='#6b6e76'>NOT STARTED</font> |
+| Demo project implementation | 2025-05-23 | <font color='#6b6e76'>NOT STARTED</font> |
+| Code review | 2025-05-30 | <font color='#6b6e76'>NOT STARTED</font> |
+| Publish the MVP version | 2025-06-06 | <font color='#6b6e76'>NOT STARTED</font> |
+| Wonder project practice with core-async library | 2025-06-30 | <font color='#6b6e76'>NOT STARTED</font> |
 
 ## Project POC
 POC code to see [here](https://github.com/food-truck/blueapron-project/pull/409)
+
+# Library Functions
+## Async Flow
+
+### 1. How to use
+1. Create an `AsyncActor`
+2. Define mapping action
+3. call `getSupplied` function to get result and make action from async to sync
+
+### 2. Combine AsyncActors
+1. Create an `AsyncActor` a which return result A
+2. Create an `AsyncActor` b which return result B
+3. Define combine logic to combine Result A with Result B to Result C
+4. Define mapping action
+5. call `getSupplied` function to get result C and make action from async to sync
+
+### 3. Fallback for exception
+1. Implement `FallbackHandler` interface to define fallback logic for async logic error occurs
+2. Create an `AsyncActor` with fallback logic
+3. Call `getSupplied` function to get result and make action from async to sync
+
+### 4. Get result with fallback logic
+1. Create an `AsyncActor`
+2. Define mapping action
+3. Implement `FallbackHandler` interface to define fallback logic for async logic error occurs
+4. Call `getSupplied` function with fallback logic to get result and make action from async to sync
