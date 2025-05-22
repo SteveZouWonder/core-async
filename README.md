@@ -75,3 +75,8 @@ POC code to see [here](https://github.com/food-truck/blueapron-project/pull/409)
 2. Define mapping action
 3. Implement `FallbackHandler` interface to define fallback logic for async logic error occurs
 4. Call `getSupplied` function with fallback logic to get result and make action from async to sync
+
+## Log monitoring (TODO)
+1. Execution result
+2. Elapsed time 
+3. Executor info
