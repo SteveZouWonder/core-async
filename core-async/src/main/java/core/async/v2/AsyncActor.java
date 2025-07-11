@@ -1,11 +1,13 @@
 package core.async.v2;
 
+import core.async.AsyncGetter;
 import core.async.common.BIReducer;
 import core.async.common.ErrorCodes;
 import core.async.common.ErrorHandler;
 import core.async.common.FallbackHandler;
-import core.async.AsyncGetter;
+import core.framework.log.ActionLogContext;
 import core.framework.log.Markers;
+import core.framework.util.StopWatch;
 import core.framework.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,10 +70,15 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
     @Override
     public void onComplete(Consumer<T> consumer) {
         supplierFuture = supplierFuture.whenComplete((t, e) -> {
-            if (Objects.isNull(e)) {
-                consumer.accept(t);
-            } else {
-                logger.error(Markers.errorCode(ErrorCodes.ASYNC_ACTOR_RUN_FAILED), Strings.format("Async actor run failed, msg={}", e.getMessage()), e);
+            StopWatch stopWatch = new StopWatch();
+            try {
+                if (Objects.isNull(e)) {
+                    consumer.accept(t);
+                } else {
+                    logger.error(Markers.errorCode(ErrorCodes.ASYNC_ACTOR_RUN_FAILED), Strings.format("Async actor run failed, msg={}", e.getMessage()), e);
+                }
+            } finally {
+                ActionLogContext.track("on_complete", stopWatch.elapsed());
             }
         });
     }
@@ -79,11 +86,16 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
     @Override
     public void onComplete(Consumer<T> consumer, ErrorHandler errorHandler) {
         supplierFuture = supplierFuture.whenComplete((t, e) -> {
-            if (Objects.isNull(e)) {
-                consumer.accept(t);
-            } else {
-                logger.error(Markers.errorCode(ErrorCodes.ASYNC_ACTOR_RUN_FAILED), Strings.format("Async actor run failed, msg={}", e.getMessage()), e);
-                errorHandler.handle(e);
+            StopWatch stopWatch = new StopWatch();
+            try {
+                if (Objects.isNull(e)) {
+                    consumer.accept(t);
+                } else {
+                    logger.error(Markers.errorCode(ErrorCodes.ASYNC_ACTOR_RUN_FAILED), Strings.format("Async actor run failed, msg={}", e.getMessage()), e);
+                    errorHandler.handle(e);
+                }
+            } finally {
+                ActionLogContext.track("on_complete", stopWatch.elapsed());
             }
         });
     }
@@ -91,10 +103,13 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
     @Override
     public T getSupplied() {
         return getExceptionalSupplied(() -> {
+            StopWatch stopWatch = new StopWatch();
             try {
                 return supplierFuture.get(waitMills, TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
                 throw new RuntimeException(e);
+            } finally {
+                ActionLogContext.track("on_complete", stopWatch.elapsed());
             }
         });
     }
