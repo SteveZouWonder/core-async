@@ -48,10 +48,11 @@ class AsyncActorTest {
     void map() {
         AsyncActor<String> asyncActor1 = testAsyncActor("test", "test1");
         AsyncActor<Integer> asyncActor2 = asyncActor1.map(s -> 11);
+        AsyncActor<Integer> asyncActor3 = asyncActor2.map(v -> 22);
         StopWatch stopWatch = new StopWatch();
-        Integer supplied = asyncActor2.getSupplied();
+        Integer supplied = asyncActor3.getSupplied();
         long elapsed = stopWatch.elapsed();
-        Assertions.assertEquals(11, supplied);
+        Assertions.assertEquals(22, supplied);
         Assertions.assertTrue(elapsed < 1030000000); // elapsed should be 1000, allow 3% deviation
     }
 
