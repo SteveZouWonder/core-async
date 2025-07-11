@@ -22,20 +22,20 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class AsyncActor<T> implements AsyncActorInterface<T> {
+    private static final Long WAIT_MILLS = 5000L;
     private final Logger logger = LoggerFactory.getLogger(AsyncActor.class);
-    private final Long waitMills = 5000L;
     private CompletableFuture<T> supplierFuture;
 
     public AsyncActor(Supplier<T> supplier) {
         supplierFuture = CompletableFuture.supplyAsync(supplier);
-        supplierFuture = supplierFuture.orTimeout(waitMills, TimeUnit.MILLISECONDS);
+        supplierFuture = supplierFuture.orTimeout(WAIT_MILLS, TimeUnit.MILLISECONDS);
         ActionLogContext.info("executor: class:{}, instance:", supplierFuture.defaultExecutor().getClass(), supplierFuture.defaultExecutor().hashCode());
     }
 
     public AsyncActor(Supplier<T> supplier, FallbackHandler<T> fallbackHandler) {
         supplierFuture = CompletableFuture.supplyAsync(supplier);
         supplierFuture = supplierFuture.exceptionallyAsync(fallbackHandler::handle);
-        supplierFuture = supplierFuture.orTimeout(waitMills, TimeUnit.MILLISECONDS);
+        supplierFuture = supplierFuture.orTimeout(WAIT_MILLS, TimeUnit.MILLISECONDS);
         ActionLogContext.info("executor: class:{}, instance:", supplierFuture.defaultExecutor().getClass(), supplierFuture.defaultExecutor().hashCode());
     }
 
@@ -55,7 +55,7 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
 
     private AsyncActor(CompletableFuture<T> tCompletableFuture) {
         supplierFuture = tCompletableFuture;
-        supplierFuture = supplierFuture.orTimeout(waitMills, TimeUnit.MILLISECONDS);
+        supplierFuture = supplierFuture.orTimeout(WAIT_MILLS, TimeUnit.MILLISECONDS);
         ActionLogContext.info("executor: class:{}, instance:", supplierFuture.defaultExecutor().getClass(), supplierFuture.defaultExecutor().hashCode());
     }
 
@@ -112,7 +112,7 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
         return getExceptionalSupplied(() -> {
             StopWatch stopWatch = new StopWatch();
             try {
-                T t = supplierFuture.get(waitMills, TimeUnit.MILLISECONDS);
+                T t = supplierFuture.get(WAIT_MILLS, TimeUnit.MILLISECONDS);
                 ActionLogContext.info("success", Boolean.TRUE);
                 return t;
             } catch (TimeoutException e) {
