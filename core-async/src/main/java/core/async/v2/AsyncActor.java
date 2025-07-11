@@ -29,29 +29,34 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
     public AsyncActor(Supplier<T> supplier) {
         supplierFuture = CompletableFuture.supplyAsync(supplier);
         supplierFuture = supplierFuture.orTimeout(waitMills, TimeUnit.MILLISECONDS);
+        ActionLogContext.info("executor: class:{}, instance:", supplierFuture.defaultExecutor().getClass(), supplierFuture.defaultExecutor().hashCode());
     }
 
     public AsyncActor(Supplier<T> supplier, FallbackHandler<T> fallbackHandler) {
         supplierFuture = CompletableFuture.supplyAsync(supplier);
         supplierFuture = supplierFuture.exceptionallyAsync(fallbackHandler::handle);
         supplierFuture = supplierFuture.orTimeout(waitMills, TimeUnit.MILLISECONDS);
+        ActionLogContext.info("executor: class:{}, instance:", supplierFuture.defaultExecutor().getClass(), supplierFuture.defaultExecutor().hashCode());
     }
 
     public AsyncActor(Supplier<T> supplier, FallbackHandler<T> fallbackHandler, int waitTimeout) {
         supplierFuture = CompletableFuture.supplyAsync(supplier);
         supplierFuture = supplierFuture.exceptionallyAsync(fallbackHandler::handle);
         supplierFuture = supplierFuture.orTimeout(waitTimeout, TimeUnit.MILLISECONDS);
+        ActionLogContext.info("executor: class:{}, instance:", supplierFuture.defaultExecutor().getClass(), supplierFuture.defaultExecutor().hashCode());
     }
 
     private AsyncActor(CompletableFuture<T> tCompletableFuture, FallbackHandler<T> fallbackHandler, int waitTimeout) {
         supplierFuture = tCompletableFuture;
         supplierFuture = supplierFuture.exceptionallyAsync(fallbackHandler::handle);
         supplierFuture = supplierFuture.orTimeout(waitTimeout, TimeUnit.MILLISECONDS);
+        ActionLogContext.info("executor: class:{}, instance:", supplierFuture.defaultExecutor().getClass(), supplierFuture.defaultExecutor().hashCode());
     }
 
     private AsyncActor(CompletableFuture<T> tCompletableFuture) {
         supplierFuture = tCompletableFuture;
         supplierFuture = supplierFuture.orTimeout(waitMills, TimeUnit.MILLISECONDS);
+        ActionLogContext.info("executor: class:{}, instance:", supplierFuture.defaultExecutor().getClass(), supplierFuture.defaultExecutor().hashCode());
     }
 
     @Override
