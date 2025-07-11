@@ -109,17 +109,18 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
 
     @Override
     public T getSupplied() {
+        // todo new action or prefix, log tracking
         return getExceptionalSupplied(() -> {
             StopWatch stopWatch = new StopWatch();
             try {
                 T t = supplierFuture.get(WAIT_MILLS, TimeUnit.MILLISECONDS);
-                ActionLogContext.info("success", Boolean.TRUE);
+                ActionLogContext.info("async_actor_success", Boolean.TRUE);
                 return t;
             } catch (TimeoutException e) {
-                ActionLogContext.info("success", Boolean.FALSE);
+                ActionLogContext.info("async_actor_success", Boolean.FALSE);
                 throw new RuntimeException(e);
             } finally {
-                ActionLogContext.track("on_complete", stopWatch.elapsed());
+                ActionLogContext.track("async_actor_on_complete", stopWatch.elapsed());
             }
         });
     }

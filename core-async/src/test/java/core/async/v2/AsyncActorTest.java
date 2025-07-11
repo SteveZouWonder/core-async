@@ -16,6 +16,7 @@ class AsyncActorTest {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            // api calling
             return returnVal;
         };
         return new AsyncActor<>(stringSupplier, e -> fallbackVal);

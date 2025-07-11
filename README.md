@@ -80,7 +80,8 @@ POC code to see [here](https://github.com/food-truck/blueapron-project/pull/409)
 1. Execution result
 2. Elapsed time: each stage, total
 3. Executor info
-4. Span: parallel action, each stage (TODO)
+4. Span: parallel action, each stage, log context transparent (new action log context) (TODO)
+5. DataDog log tracking
 
 # Handbook
-1. Functions scenario, attentions
+1. Functions scenario, attentions, more clear for user handbook.
