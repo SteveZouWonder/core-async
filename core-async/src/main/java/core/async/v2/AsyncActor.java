@@ -90,9 +90,11 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
             try {
                 if (Objects.isNull(e)) {
                     consumer.accept(t);
+                    ActionLogContext.info("success", Boolean.TRUE);
                 } else {
                     logger.error(Markers.errorCode(ErrorCodes.ASYNC_ACTOR_RUN_FAILED), Strings.format("Async actor run failed, msg={}", e.getMessage()), e);
                     errorHandler.handle(e);
+                    ActionLogContext.info("success", Boolean.FALSE);
                 }
             } finally {
                 ActionLogContext.track("on_complete", stopWatch.elapsed());
@@ -105,8 +107,11 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
         return getExceptionalSupplied(() -> {
             StopWatch stopWatch = new StopWatch();
             try {
-                return supplierFuture.get(waitMills, TimeUnit.MILLISECONDS);
+                T t = supplierFuture.get(waitMills, TimeUnit.MILLISECONDS);
+                ActionLogContext.info("success", Boolean.TRUE);
+                return t;
             } catch (TimeoutException e) {
+                ActionLogContext.info("success", Boolean.FALSE);
                 throw new RuntimeException(e);
             } finally {
                 ActionLogContext.track("on_complete", stopWatch.elapsed());
@@ -122,8 +127,11 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
 
     private T getExceptionalSupplied(AsyncGetter<T> exceptionGetter) {
         try {
-            return exceptionGetter.get();
+            T t = exceptionGetter.get();
+            ActionLogContext.info("success", Boolean.TRUE);
+            return t;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            ActionLogContext.info("success", Boolean.FALSE);
             logger.error(Markers.errorCode(ErrorCodes.ASYNC_ACTOR_RUN_FAILED), Strings.format("Async actor run failed, msg={}", e.getMessage()), e);
             throw new RuntimeException(e);
         }
