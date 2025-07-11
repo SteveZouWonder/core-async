@@ -94,7 +94,6 @@ public final class AsyncActor<T> implements AsyncActorInterface<T> {
             try {
                 return supplierFuture.get(waitMills, TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
-                // todo exception error msg
                 throw new RuntimeException(e);
             }
         });
