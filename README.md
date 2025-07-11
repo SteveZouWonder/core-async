@@ -79,8 +79,8 @@ POC code to see [here](https://github.com/food-truck/blueapron-project/pull/409)
 ## Log monitoring
 1. Execution result
 2. Elapsed time: each stage, total
-3. Span: parallel action, each stage (TODO)
-3. Executor info (TODO)
+3. Executor info
+4. Span: parallel action, each stage (TODO)
 
 # Handbook
 1. Functions scenario, attentions
